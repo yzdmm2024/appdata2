@@ -1,0 +1,53 @@
+name: Build AppData2 (deb)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    env:
+      THEOS: ${{ github.workspace }}/theos
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: brew install dpkg ldid
+
+      - name: Setup theos
+        run: git clone --recursive https://github.com/theos/theos.git "$THEOS"
+
+      - name: Normalize control line endings
+        run: sed -i '' 's/\r$//' control
+
+      - name: Build rootless deb
+        run: make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+
+      - name: Collect artifacts
+        if: always()
+        run: |
+          mkdir -p out
+          cp -v packages/*.deb out/ 2>/dev/null || true
+          find .theos -name 'AppData2.dylib' -exec cp -v {} out/ \; 2>/dev/null || true
+          ls -la out || true
+
+      - name: Verify deb
+        if: always()
+        run: |
+          set -x
+          ls -la packages/ || true
+          for f in packages/*.deb; do
+            dpkg-deb -I "$f"
+            dpkg-deb -c "$f"
+          done
+          file out/AppData2.dylib || true
+          otool -l out/AppData2.dylib | grep -A3 LC_BUILD_VERSION || true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: appdata2
+          path: out/*
+          if-no-files-found: warn

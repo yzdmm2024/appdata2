@@ -1,0 +1,11 @@
+Package: com.yzdmm.appdata2
+Name: AppData2
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: 查看与管理应用数据（AppData 二改）。新增「Safe Clean 保留登录清理」：清理 Caches/Tmp/Logs 等可弃文件与其它非关键目录，保留登录态（Preferences/Cookies/HTTPStorages/Application Support/WebKit/Accounts），并可选择保留 Documents。
+Depiction: https://github.com/yzdmm2024/appdata2
+Maintainer: yzdmm2024
+Author: Fouad Raheb (original AppData), yzdmm2024 (fork)
+Section: Tweaks
+Depends: firmware (>= 14.0), mobilesubstrate (>= 0.9.5000) | com.rpetrich.ellekit
+Icon: file:///var/jb/Library/PreferenceBundles/AppData2Prefs.bundle/AppData2@3x.png
