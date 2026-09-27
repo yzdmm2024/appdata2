@@ -25,6 +25,7 @@ AppData2Prefs_FRAMEWORKS := Foundation UIKit
 # Preferences framework binary is never linked — resolve symbols dynamically.
 AppData2Prefs_LDFLAGS := -Wl,-undefined,dynamic_lookup
 AppData2Prefs_CFLAGS := -fobjc-arc -Wno-error -Wno-deprecated-declarations \
+	-IClasses -IClasses/Cells -IClasses/Controllers \
 	-I$(APPDATA_DIR)/Classes/Helpers
 # Resources/ (Info.plist + icons) is staged into the bundle automatically.
 
